@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentação QS.js - Simulador Quântico</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.7;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+            background-color: #f9f9f9;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        h1 {
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            border-left: 4px solid #3498db;
+            padding-left: 10px;
+            margin-top: 30px;
+        }
+        code {
+            background-color: #f0f0f0;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        pre {
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .function-doc {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .function-name {
+            color: #2980b9;
+            font-weight: bold;
+        }
+        .warning {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 10px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>QS.js - Simulador Quântico</h1>
+    <p>Uma biblioteca JavaScript para simulação de operações básicas em qubits.</p>
+
+    <h2>Conceitos Fundamentais</h2>
+    <p>Um qubit é a unidade básica da informação quântica, representado por um vetor de estado:</p>
+    <p><code>|ψ⟩ = α|0⟩ + β|1⟩</code></p>
+    <p>Onde:</p>
+    <ul>
+        <li><code>α</code> e <code>β</code> são amplitudes complexas</li>
+        <li><code>|α|²</code> é a probabilidade de medir 0</li>
+        <li><code>|β|²</code> é a probabilidade de medir 1</li>
+        <li>O estado deve ser normalizado: <code>|α|² + |β|² = 1</code></li>
+    </ul>
+
+    <h2>Funções Disponíveis</h2>
+
+    <div class="function-doc">
+        <h3 class="function-name">newQBIT()</h3>
+        <p>Cria um novo qubit no estado base |0⟩.</p>
+        <p><strong>Retorno:</strong> Um objeto qubit com propriedades alpha e beta</p>
+        <p><strong>Exemplo:</strong></p>
+        <pre><code>const qbit = newQBIT();
+console.log(qbit); // { alpha: 1, beta: 0 }</code></pre>
+    </div>
+
+    <div class="function-doc">
+        <h3 class="function-name">newHADAMARD(qbit)</h3>
+        <p>Aplica a porta quântica Hadamard ao qubit, criando uma superposição equitativa.</p>
+        <p>Transformação:</p>
+        <ul>
+            <li>|0⟩ → (|0⟩ + |1⟩)/√2</li>
+            <li>|1⟩ → (|0⟩ - |1⟩)/√2</li>
+        </ul>
+
+        <p><strong>Exemplo:</strong></p>
+        <pre><code>const qbit = newQBIT();
+const superposicao = newHADAMARD(qbit);
+console.log(superposicao); // { alpha: ~0.707, beta: ~0.707 }</code></pre>
+    </div>
+
+    <div class="function-doc">
+        <h3 class="function-name">mQbit(qubit)</h3>
+        <p>Realiza uma medição do qubit, colapsando seu estado para |0⟩ ou |1⟩.</p>
+        <div class="warning">
+            <strong>Atenção:</strong> A função verifica se o qubit está normalizado e emite um aviso se não estiver.
+        </div>
+
+        <p><strong>Exemplo:</strong></p>
+        <pre><code>const qbit = newHADAMARD(newQBIT());
+const resultado = mQbit(qbit); // 50% de chance de 0 ou 1
+console.log(resultado, qbit); // 0 e {alpha: 1, beta: 0} OU 1 e {alpha: 0, beta: 1}</code></pre>
+    </div>
+
+    <div class="function-doc">
+        <h3 class="function-name">portx(qbit)</h3>
+        <p>Aplica a porta quântica X (equivalente ao NOT clássico).</p>
+        <p>Transformação:</p>
+        <ul>
+            <li>|0⟩ → |1⟩</li>
+            <li>|1⟩ → |0⟩</li>
+        </ul>
+
+        <p><strong>Exemplo:</strong></p>
+        <pre><code>const qbit = newQBIT(); // |0⟩
+const flipped = portx(qbit);
+console.log(flipped); // { alpha: 0, beta: 1 } (|1⟩)</code></pre>
+    </div>
+
+    <div class="function-doc">
+        <h3 class="function-name">portz(qbit)</h3>
+        <p>Aplica a porta quântica Z (muda a fase do estado |1⟩).</p>
+        <p>Transformação:</p>
+        <ul>
+            <li>|0⟩ → |0⟩</li>
+            <li>|1⟩ → -|1⟩</li>
+        </ul>
+        <p><strong>Exemplo:</strong></p>
+        <pre><code>const qbit = newHADAMARD(newQBIT()); // (|0⟩ + |1⟩)/√2
+const phased = portz(qbit);
+console.log(phased); // { alpha: ~0.707, beta: ~-0.707 } (|0⟩ - |1⟩)/√2</code></pre>
+    </div>
+
+    <h2>Exemplo Completo</h2>
+    <pre><code>// Cria um qubit no estado |0⟩
+const q = newQBIT();
+
+// Aplica Hadamard para criar superposição
+const q_super = newHADAMARD(q);
+
+// Aplica porta X
+const q_flipped = portx(q_super);
+
+// Mede o qubit
+const result = mQbit(q_flipped);
+
+console.log("Resultado da medição:", result);
+console.log("Estado pós-medida:", q_flipped);</code></pre>
+
+    <h2>Observações</h2>
+    <ul>
+        <li>Esta é uma simulação clássica de comportamentos quânticos</li>
+        <li>Qubits reais possuem propriedades adicionais como emaranhamento</li>
+        <li>Para sistemas multi-qubit, seriam necessárias extensões na biblioteca</li>
+    </ul>
+</body>
+</html>
