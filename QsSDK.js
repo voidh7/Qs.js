@@ -1,6 +1,11 @@
 /*
+ Criado por: Void  
+ Contribuição: Ravy Ns (função qbitRand)  
+ Data de criação: 09/04/2025  
 
+ Descrição: Este código foi desenvolvido com foco em simulações envolvendo qubits e operações quânticas.
 */
+
 function qbitRand(min, max) {
   let seed = 0xF1EA5EED;
   let stateA = 0xBADC0FFE;
@@ -36,9 +41,6 @@ function qbitRand(min, max) {
   return (Math.abs(seed) % range) + min;
 }
 
-for (let i = 0; i < 10; i++) {
-  console.log("QbitRand:", qbitRand(1, 10));
-}
 function newQBIT() {
   return {
     alpha: 1,
