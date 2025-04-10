@@ -6,7 +6,7 @@
  Descrição: Este código foi desenvolvido com foco em simulações envolvendo qubits e operações quânticas.
 */
 
-function qbitRand(min, max) {
+function qbitRand(min = 0, max = 9999) {
   let seed = 0xF1EA5EED;
   let stateA = 0xBADC0FFE;
   let stateB = 0xDEADFA11;
@@ -67,7 +67,7 @@ function mQbit(qubit) {
     console.warn(`Qubit não normalizado! |α|² + |β|² = ${soma}`);
   }
 
-  const random = Math.random();
+  const random = qbitRand();
   let resultado;
   
   if (random < prob0) {
